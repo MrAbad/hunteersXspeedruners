@@ -20,10 +20,13 @@ public class GetSpeedrunners implements CommandExecutor
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
     {
-        for (Player speedrunner : plugin.speedrunnersList)
+        if (!plugin.speedrunnersList.isEmpty())
         {
-            sender.sendMessage(speedrunner.getDisplayName());
-        }
+            for (Player speedrunner : plugin.speedrunnersList)
+            {
+                sender.sendMessage(speedrunner.getDisplayName());
+            }
+        } else sender.sendMessage(ChatColor.RED + "None of the current players are speedrunners!");
         return true;
     }
 }
