@@ -11,8 +11,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.CompassMeta;
 import ru.mrabad.main.HxS;
 
-import java.util.HashMap;
-
 public class OnCompassClick implements Listener
 {
     private final HxS plugin;
@@ -31,6 +29,7 @@ public class OnCompassClick implements Listener
         {
             e.setCancelled(true);
             p.sendMessage("Lox!");
+            if (plugin.speedrunnersList.isEmpty()) return;
             Player nearest = plugin.speedrunnersList.get(0);
             int nearestDiff = (int) (Math.abs(p.getLocation().getX() - nearest.getLocation().getX()) +
                                      Math.abs(p.getLocation().getY() - nearest.getLocation().getY()) +
@@ -76,13 +75,13 @@ public class OnCompassClick implements Listener
                                              Math.abs(p.getLocation().getY() - speedrunner.getLocation().getY() / 8) +
                                              Math.abs(p.getLocation().getZ() - speedrunner.getLocation().getZ() / 8));
                         nearest = speedrunner;
-                        p.sendMessage("B");
+                        p.sendMessage("C");
                     }
                     p.sendMessage("C!");
                 } else return;
             }
             CompassMeta meta = (CompassMeta) p.getInventory().getItemInMainHand().getItemMeta();
-            meta.setLodestoneTracked(true);
+            meta.setLodestoneTracked(false);
             if (p.getWorld() == nearest.getWorld())
             {
                 meta.setLodestone(nearest.getLocation());
@@ -93,6 +92,7 @@ public class OnCompassClick implements Listener
             {
                 meta.setLodestone(new Location(p.getWorld(), nearest.getLocation().getX() / 8, nearest.getLocation().getY() / 8, nearest.getLocation().getZ() / 8));
             }
+            p.getInventory().getItemInMainHand().setItemMeta(meta);
         }
     }
 }

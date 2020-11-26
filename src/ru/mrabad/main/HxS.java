@@ -54,7 +54,7 @@ public class HxS extends JavaPlugin
     {
         for (int speedrunnersCount = 0; speedrunnersCount < speedrunnersList.size(); speedrunnersCount++)
         {
-            speedrunnersListRaw.add(speedrunnersList.get(speedrunnersCount).getUniqueId().toString());
+            if (!speedrunnersListRaw.contains(speedrunnersList.get(speedrunnersCount).getUniqueId().toString())) speedrunnersListRaw.add(speedrunnersList.get(speedrunnersCount).getUniqueId().toString());
             speedrunnersList.remove(speedrunnersCount);
         }
         File speedrunnersFile = new File(getDataFolder() + File.separator + "speedrunners.yml");

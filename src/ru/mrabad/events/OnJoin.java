@@ -21,7 +21,7 @@ public class OnJoin implements Listener
         Player p = e.getPlayer();
         if (plugin.speedrunnersListRaw.contains(p.getUniqueId().toString()))
         {
-            plugin.speedrunnersList.add(p);
+            if (!plugin.speedrunnersList.contains(p)) plugin.speedrunnersList.add(p);
             plugin.speedrunnersListRaw.remove(p.getUniqueId().toString());
         }
     }
