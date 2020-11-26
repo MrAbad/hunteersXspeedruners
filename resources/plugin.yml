@@ -1,3 +1,7 @@
 name: HxS
 main: ru.mrabad.main.HxS
 version: 1.0
+commands:
+  addspeedrunner:
+    description: Marking player ass speedrunner
+    usage: /addspeedrunner <player>
