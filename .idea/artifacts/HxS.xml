@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="HxS">
+    <output-path>$PROJECT_DIR$/../server/plugins</output-path>
+    <root id="archive" name="HxS.jar">
+      <element id="module-output" name="hunteersXspeedruners" />
+      <element id="dir-copy" path="$PROJECT_DIR$/resources" />
+    </root>
+  </artifact>
+</component>
