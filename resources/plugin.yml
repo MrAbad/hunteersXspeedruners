@@ -3,5 +3,11 @@ main: ru.mrabad.main.HxS
 version: 1.0
 commands:
   addspeedrunner:
-    description: Marking player ass speedrunner
+    description: Marking a player ass speedrunner
     usage: /addspeedrunner <player>
+  removespeedrunner:
+    description: Unmarking a player ass speedrunner
+    usage: /removespeedrunner <player>
+  getspeedrunners:
+    description: Get speedrunners
+    usage: /getspeedrunners

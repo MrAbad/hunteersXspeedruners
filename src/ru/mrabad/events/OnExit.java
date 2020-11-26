@@ -23,6 +23,7 @@ public class OnExit implements Listener
         if (plugin.speedrunnersList.contains(p))
         {
             plugin.speedrunnersListRaw.add(p.getUniqueId().toString());
+            plugin.speedrunnersList.remove(p);
         }
     }
 }

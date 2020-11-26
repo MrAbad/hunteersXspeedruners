@@ -23,7 +23,6 @@ public class OnJoin implements Listener
         {
             plugin.speedrunnersList.add(p);
             plugin.speedrunnersListRaw.remove(p.getUniqueId().toString());
-            p.sendMessage("Lox");
         }
     }
 }

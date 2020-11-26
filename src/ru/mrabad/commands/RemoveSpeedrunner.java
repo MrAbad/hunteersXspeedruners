@@ -8,11 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import ru.mrabad.main.HxS;
 
-public class AddSpeedrunner implements CommandExecutor
+public class RemoveSpeedrunner implements CommandExecutor
 {
     private final HxS plugin;
 
-    public AddSpeedrunner(HxS plugin)
+    public RemoveSpeedrunner(HxS plugin)
     {
         this.plugin = plugin;
     }
@@ -23,19 +23,14 @@ public class AddSpeedrunner implements CommandExecutor
         if (args.length != 0)
         {
             Player p = Bukkit.getPlayer(args[0]);
-            if (p != null)
+            if (p != null && plugin.speedrunnersList.contains(p))
             {
-                if (!plugin.speedrunnersList.contains(p))
-                {
-                    plugin.speedrunnersList.add(p);
-                    sender.sendMessage(ChatColor.GREEN + p.getDisplayName() + " is now speedrunner!");
-                } else
-                {
-                    sender.sendMessage(ChatColor.RED + "This player is already speedrunner!");
-                }
+                plugin.speedrunnersList.remove(p);
+                plugin.speedrunnersListRaw.remove(p.getUniqueId().toString());
+                sender.sendMessage(ChatColor.RED + p.getDisplayName() + " is no longer speedrunner!");
             } else
             {
-                sender.sendMessage(ChatColor.RED + "Wrong name!");
+                sender.sendMessage(ChatColor.RED + "This player isn't speedrunner!");
             }
             return true;
         } else
