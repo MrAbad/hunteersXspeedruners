@@ -11,6 +11,7 @@ import ru.mrabad.commands.RemoveSpeedrunner;
 import ru.mrabad.events.OnCompassClick;
 import ru.mrabad.events.OnExit;
 import ru.mrabad.events.OnJoin;
+import ru.mrabad.events.OnPortalTp;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +44,7 @@ public class HxS extends JavaPlugin
         Bukkit.getPluginManager().registerEvents(new OnJoin(this), this);
         Bukkit.getPluginManager().registerEvents(new OnExit(this), this);
         Bukkit.getPluginManager().registerEvents(new OnCompassClick(this), this);
+        Bukkit.getPluginManager().registerEvents(new OnPortalTp(this), this);
 
         getCommand("addspeedrunner").setExecutor(new AddSpeedrunner(this));
         getCommand("removespeedrunner").setExecutor(new RemoveSpeedrunner(this));

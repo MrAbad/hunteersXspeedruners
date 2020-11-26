@@ -9,6 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.meta.CompassMeta;
+import org.bukkit.util.Vector;
 import ru.mrabad.main.HxS;
 
 public class OnCompassClick implements Listener
@@ -24,73 +25,53 @@ public class OnCompassClick implements Listener
     public void onCompassClick(PlayerInteractEvent e)
     {
         Player p = e.getPlayer();
+        if (plugin.speedrunnersList.contains(p)) return;
         Action a = e.getAction();
         if (p.getInventory().getItemInMainHand().getType() == Material.COMPASS && (a == Action.RIGHT_CLICK_BLOCK || a == Action.RIGHT_CLICK_AIR))
         {
             e.setCancelled(true);
-            p.sendMessage("Lox!");
             if (plugin.speedrunnersList.isEmpty()) return;
             Player nearest = plugin.speedrunnersList.get(0);
-            int nearestDiff = (int) (Math.abs(p.getLocation().getX() - nearest.getLocation().getX()) +
-                                     Math.abs(p.getLocation().getY() - nearest.getLocation().getY()) +
-                                     Math.abs(p.getLocation().getZ() - nearest.getLocation().getZ()));
+            int nearestDiff = (int) p.getLocation().distanceSquared(nearest.getLocation().toVector().toLocation(p.getWorld()));
             for (Player speedrunner : plugin.speedrunnersList)
             {
                 if (p.getWorld().getName().equals(speedrunner.getWorld().getName()))
                 {
-                    if ((int) (Math.abs(p.getLocation().getX() - speedrunner.getLocation().getX()) +
-                               Math.abs(p.getLocation().getY() - speedrunner.getLocation().getY()) +
-                               Math.abs(p.getLocation().getZ() - speedrunner.getLocation().getZ()))
-                    < nearestDiff)
+                    if ((int) p.getLocation().distanceSquared(speedrunner.getLocation()) < nearestDiff)
                     {
-                        nearestDiff = (int) (Math.abs(p.getLocation().getX() - speedrunner.getLocation().getX()) +
-                                             Math.abs(p.getLocation().getY() - speedrunner.getLocation().getY()) +
-                                             Math.abs(p.getLocation().getZ() - speedrunner.getLocation().getZ()));
+                        nearestDiff = (int) p.getLocation().distanceSquared(speedrunner.getLocation());
                         nearest = speedrunner;
-                        p.sendMessage("A");
                     }
-                    p.sendMessage("A!");
                 } else if (speedrunner.getWorld().getName().equals(Bukkit.getWorlds().get(1).getName()) && p.getWorld().getName().equals(Bukkit.getWorlds().get(0).getName()))
                 {
-                    if ((int) (Math.abs(p.getLocation().getX() - speedrunner.getLocation().getX() * 8) +
-                               Math.abs(p.getLocation().getY() - speedrunner.getLocation().getY() * 8) +
-                               Math.abs(p.getLocation().getZ() - speedrunner.getLocation().getZ() * 8))
-                    < nearestDiff)
+                    if ((int) p.getLocation().distanceSquared(speedrunner.getLocation().multiply(8).toVector().toLocation(p.getWorld())) < nearestDiff)
                     {
-                        nearestDiff = (int) (Math.abs(p.getLocation().getX() - speedrunner.getLocation().getX() * 8) +
-                                             Math.abs(p.getLocation().getY() - speedrunner.getLocation().getY() * 8) +
-                                             Math.abs(p.getLocation().getZ() - speedrunner.getLocation().getZ() * 8));
+                        nearestDiff = (int) speedrunner.getLocation().toVector().toLocation(p.getWorld()).distanceSquared(p.getLocation().multiply(8));
                         nearest = speedrunner;
-                        p.sendMessage("B");
                     }
-                    p.sendMessage("B!");
                 } else if (speedrunner.getWorld().getName().equals(Bukkit.getWorlds().get(0).getName()) && p.getWorld().getName().equals(Bukkit.getWorlds().get(1).getName()))
                 {
-                    if ((int) (Math.abs(p.getLocation().getX() - speedrunner.getLocation().getX() / 8) +
-                               Math.abs(p.getLocation().getY() - speedrunner.getLocation().getY() / 8) +
-                               Math.abs(p.getLocation().getZ() - speedrunner.getLocation().getZ() / 8))
-                    < nearestDiff)
+                    if ((int) p.getLocation().distanceSquared(speedrunner.getLocation().multiply(1./8).toVector().toLocation(p.getWorld())) < nearestDiff)
                     {
-                        nearestDiff = (int) (Math.abs(p.getLocation().getX() - speedrunner.getLocation().getX() / 8) +
-                                             Math.abs(p.getLocation().getY() - speedrunner.getLocation().getY() / 8) +
-                                             Math.abs(p.getLocation().getZ() - speedrunner.getLocation().getZ() / 8));
+                        nearestDiff = (int) p.getLocation().distanceSquared(speedrunner.getLocation().multiply(1./8).toVector().toLocation(p.getWorld()));
                         nearest = speedrunner;
-                        p.sendMessage("C");
                     }
-                    p.sendMessage("C!");
-                } else return;
+                }
             }
             CompassMeta meta = (CompassMeta) p.getInventory().getItemInMainHand().getItemMeta();
             meta.setLodestoneTracked(false);
-            if (p.getWorld() == nearest.getWorld())
+            Location nearestLoc = nearest.getLocation();
+            if (p.getWorld() == nearestLoc.getWorld())
             {
-                meta.setLodestone(nearest.getLocation());
+                meta.setLodestone(nearestLoc);
             } else if (p.getWorld() == Bukkit.getWorlds().get(0))
             {
-                meta.setLodestone(new Location(p.getWorld(), nearest.getLocation().getX() * 8, nearest.getLocation().getY() * 8, nearest.getLocation().getZ() * 8));
+                nearestLoc.setWorld(p.getWorld());
+                meta.setLodestone(nearestLoc.multiply(8));
             } else if (p.getWorld() == Bukkit.getWorlds().get(1))
             {
-                meta.setLodestone(new Location(p.getWorld(), nearest.getLocation().getX() / 8, nearest.getLocation().getY() / 8, nearest.getLocation().getZ() / 8));
+                nearestLoc.setWorld(p.getWorld());
+                meta.setLodestone(nearestLoc.multiply(1./8));
             }
             p.getInventory().getItemInMainHand().setItemMeta(meta);
         }
